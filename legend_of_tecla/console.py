@@ -12,7 +12,12 @@ Salida = Callable[[str], None]
 
 
 @dataclass(slots=True)
-class ConsolaJuego:
+class ConsolaTexto:
+    """Adaptador de consola testeable.
+
+    Usa ``ParserComandos`` para no duplicar parsing en CLI, GUI o scripts.
+    """
+
     parser: ParserComandos = field(default_factory=ParserComandos)
     entrada: Entrada = input
     salida: Salida = print
@@ -21,7 +26,7 @@ class ConsolaJuego:
     def ejecutar_lineas(self, motor, lineas: Iterable[str]) -> list[str]:
         respuestas: list[str] = []
         for linea in lineas:
-            comando = self.parser.parse(linea)
+            comando = self.parser.parsear(linea)
             respuesta = comando.ejecutar(motor)
             respuestas.append(respuesta)
         return respuestas
@@ -34,7 +39,14 @@ class ConsolaJuego:
                 self.salida("Fin de la partida.")
                 return
             try:
-                comando = self.parser.parse(linea)
+                comando = self.parser.parsear(linea)
                 self.salida(comando.ejecutar(motor))
             except Exception as exc:
                 self.salida(f"Error: {exc}")
+
+
+# Alias retrocompatible con la primera tanda de migracion.
+ConsolaJuego = ConsolaTexto
+
+
+__all__ = ["ConsolaJuego", "ConsolaTexto", "Entrada", "Salida"]
