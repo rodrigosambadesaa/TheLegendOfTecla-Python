@@ -1,0 +1,5 @@
+# nombre;tipo;fila;columna
+botiquin_A;botiquin;1;1
+rifle_A;rifle_asalto;2;3
+linterna_A;linterna;0;1
+cubo_A;cuboagua;1;0
