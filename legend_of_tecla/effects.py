@@ -62,10 +62,9 @@ class EfectoEstado:
             self.potencia = max(self.potencia, otro.potencia)
 
 
-@dataclass(slots=True)
 class Fuego(EfectoEstado):
-    estado: CharacterState = CharacterState.BURNING
-    politica: PoliticaAcumulacion = PoliticaAcumulacion.ACUMULAR_POTENCIA
+    def __init__(self, turnos: int, potencia: int = 1) -> None:
+        super().__init__(CharacterState.BURNING, turnos, potencia, PoliticaAcumulacion.ACUMULAR_POTENCIA)
 
     def aplicar_turno(self, objetivo: SoportaEstado) -> list[str]:
         danio = objetivo.receive_damage(self.potencia)
@@ -73,29 +72,26 @@ class Fuego(EfectoEstado):
         return [f"{objetivo.name} sufre {danio} de dano por fuego."]
 
 
-@dataclass(slots=True)
 class Mojado(EfectoEstado):
-    estado: CharacterState = CharacterState.WET
-    politica: PoliticaAcumulacion = PoliticaAcumulacion.REFRESCAR
+    def __init__(self, turnos: int, potencia: int = 1) -> None:
+        super().__init__(CharacterState.WET, turnos, potencia, PoliticaAcumulacion.REFRESCAR)
 
     def aplicar_inicio(self, objetivo: SoportaEstado) -> list[str]:
         return [f"{objetivo.name} queda mojado y resiste mejor el fuego."]
 
 
-@dataclass(slots=True)
 class Aturdido(EfectoEstado):
-    estado: CharacterState = CharacterState.STUNNED
-    politica: PoliticaAcumulacion = PoliticaAcumulacion.REFRESCAR
+    def __init__(self, turnos: int, potencia: int = 1) -> None:
+        super().__init__(CharacterState.STUNNED, turnos, potencia, PoliticaAcumulacion.REFRESCAR)
 
     def aplicar_turno(self, objetivo: SoportaEstado) -> list[str]:
         self.turnos -= 1
         return [f"{objetivo.name} pierde el turno por aturdimiento."]
 
 
-@dataclass(slots=True)
 class Inspirado(EfectoEstado):
-    estado: CharacterState = CharacterState.INSPIRED
-    politica: PoliticaAcumulacion = PoliticaAcumulacion.REFRESCAR
+    def __init__(self, turnos: int, potencia: int = 1) -> None:
+        super().__init__(CharacterState.INSPIRED, turnos, potencia, PoliticaAcumulacion.REFRESCAR)
 
     def aplicar_inicio(self, objetivo: SoportaEstado) -> list[str]:
         recuperada = objetivo.recover_energy(self.potencia)
