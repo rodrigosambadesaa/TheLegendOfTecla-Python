@@ -6,6 +6,7 @@ from .effects import Fuego, GestorEstados, Inspirado, Mojado
 from .engine import MotorTurnos, ResultadoAccion, SistemaCombate, SistemaFuego, SistemaInventario, SistemaMovimiento, SistemaTrampas
 from .events import BusEventos, EventoJuego, RegistroEventos, TipoEvento
 from .exceptions import AccionInvalidaError, CargaDatosError, TeclaError
+from .facade import cargar_partida, crear_partida, crear_partida_desde_config, guardar_partida, sincronizar_logros
 from .game import Game, GameConfig, create_game, load_game, save_game
 from .hierarchy import (
     AliadoEscuadron,
@@ -102,10 +103,15 @@ __all__ = [
     "Validaciones",
     "VictoryCondition",
     "Zapador",
+    "cargar_partida",
     "controlador_para",
     "crear_enemigo",
     "crear_jugador",
+    "crear_partida",
+    "crear_partida_desde_config",
     "create_game",
+    "guardar_partida",
     "load_game",
     "save_game",
+    "sincronizar_logros",
 ]
