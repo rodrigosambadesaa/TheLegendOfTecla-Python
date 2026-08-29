@@ -1,0 +1,13 @@
+{
+  "filas": 6,
+  "columnas": 6,
+  "inicio": {"fila": 0, "columna": 0},
+  "objetivo": {"fila": 5, "columna": 5},
+  "celdas": [
+    {"fila": 1, "columna": 1, "transitable": true, "objetos": [{"nombre": "botiquin_json", "tipo": "botiquin", "peso": 1, "valor": 25}]},
+    {"fila": 2, "columna": 2, "oscura": true, "sueloMadera": true, "antorchaMural": true},
+    {"fila": 2, "columna": 4, "descripcion": "Acceso al reactor", "transitable": true, "elementoTipo": "puerta", "elementoId": "reactor-norte", "elementoEstado": "BLOQUEADA", "referencia": "reactor", "resistencia": 30, "dificultad": 5},
+    {"fila": 3, "columna": 1, "fuenteAgua": true},
+    {"fila": 4, "columna": 2, "elementoTipo": "trampa", "elementoId": "pinchos", "elementoEstado": "ARMADA", "resistencia": 20, "dificultad": 5}
+  ]
+}
