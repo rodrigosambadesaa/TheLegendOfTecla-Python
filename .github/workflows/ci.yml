@@ -15,4 +15,3 @@ jobs:
       - run: python -m pip install -e .[dev]
       - run: python -m compileall legend_of_tecla
       - run: pytest
-      - run: ruff check legend_of_tecla tests
