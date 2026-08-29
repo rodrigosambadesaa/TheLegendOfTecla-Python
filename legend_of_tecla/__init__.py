@@ -2,6 +2,7 @@
 
 from .ai import AccionIA, ControladorIA, PercepcionIA, TipoAccionIA, controlador_para
 from .commands import Comando, ParserComandos, RegistroComandos
+from .completeness import EQUIVALENCIAS, EquivalenciaModulo, auditoria_paridad, paridad_cerrada
 from .effects import Fuego, GestorEstados, Inspirado, Mojado
 from .engine import MotorTurnos, ResultadoAccion, SistemaCombate, SistemaFuego, SistemaInventario, SistemaMovimiento, SistemaTrampas
 from .events import BusEventos, EventoJuego, RegistroEventos, TipoEvento
@@ -63,8 +64,10 @@ __all__ = [
     "CuboAgua",
     "Difficulty",
     "Direction",
+    "EQUIVALENCIAS",
     "Enemigo",
     "EntradaHistorial",
+    "EquivalenciaModulo",
     "EventoJuego",
     "Explosivo",
     "Fuego",
@@ -106,6 +109,7 @@ __all__ = [
     "Validaciones",
     "VictoryCondition",
     "Zapador",
+    "auditoria_paridad",
     "cargar_partida",
     "controlador_para",
     "crear_enemigo",
@@ -115,6 +119,7 @@ __all__ = [
     "create_game",
     "guardar_partida",
     "load_game",
+    "paridad_cerrada",
     "save_game",
     "sincronizar_logros",
 ]
