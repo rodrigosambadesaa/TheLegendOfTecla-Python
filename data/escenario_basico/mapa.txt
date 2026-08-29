@@ -1,0 +1,7 @@
+6x6
+0,0
+5,5
+oscura;2;2
+madera;2;2
+antorcha;2;2
+fuente;3;1
