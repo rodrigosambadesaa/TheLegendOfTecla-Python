@@ -1,5 +1,11 @@
 """The Legend of Tecla reimplementado en Python."""
 
+from .ai import AccionIA, ControladorIA, PercepcionIA, TipoAccionIA, controlador_para
+from .commands import Comando, ParserComandos, RegistroComandos
+from .effects import Fuego, GestorEstados, Inspirado, Mojado
+from .engine import MotorTurnos, ResultadoAccion, SistemaCombate, SistemaFuego, SistemaInventario, SistemaMovimiento, SistemaTrampas
+from .events import BusEventos, EventoJuego, RegistroEventos, TipoEvento
+from .exceptions import AccionInvalidaError, CargaDatosError, TeclaError
 from .game import Game, GameConfig, create_game, load_game, save_game
 from .hierarchy import (
     AliadoEscuadron,
@@ -33,41 +39,70 @@ from .hierarchy import (
     crear_jugador,
 )
 from .model import Difficulty, Direction, Position, VictoryCondition
+from .validation import Limites, Validaciones
 
 __all__ = [
+    "AccionIA",
+    "AccionInvalidaError",
     "AliadoEscuadron",
     "Arma",
     "Armadura",
     "Berserker",
     "Binocular",
     "Botiquin",
+    "BusEventos",
+    "CargaDatosError",
+    "Comando",
     "Commander",
     "CommanderPrime",
     "Componente",
+    "ControladorIA",
     "Credencial",
     "CuboAgua",
     "Difficulty",
     "Direction",
     "Enemigo",
+    "EventoJuego",
     "Explosivo",
+    "Fuego",
     "Floater",
     "Francotirador",
     "Game",
     "GameConfig",
+    "GestorEstados",
     "Granada",
     "HeavyFloater",
+    "Inspirado",
     "JERARQUIA_CANONICA",
     "Jefe",
     "Jugador",
+    "Limites",
     "Linterna",
     "Marine",
+    "Mojado",
+    "MotorTurnos",
     "Municion",
     "Objeto",
+    "ParserComandos",
+    "PercepcionIA",
     "Personaje",
     "Position",
+    "RegistroComandos",
+    "RegistroEventos",
+    "ResultadoAccion",
     "Sectoid",
+    "SistemaCombate",
+    "SistemaFuego",
+    "SistemaInventario",
+    "SistemaMovimiento",
+    "SistemaTrampas",
+    "TeclaError",
+    "TipoAccionIA",
+    "TipoEvento",
+    "Validaciones",
     "VictoryCondition",
     "Zapador",
+    "controlador_para",
     "crear_enemigo",
     "crear_jugador",
     "create_game",
