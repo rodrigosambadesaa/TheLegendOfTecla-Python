@@ -40,6 +40,7 @@ from .hierarchy import (
     crear_jugador,
 )
 from .model import Difficulty, Direction, Position, VictoryCondition
+from .runtime import EntradaHistorial, SesionJuego
 from .validation import Limites, Validaciones
 
 __all__ = [
@@ -63,6 +64,7 @@ __all__ = [
     "Difficulty",
     "Direction",
     "Enemigo",
+    "EntradaHistorial",
     "EventoJuego",
     "Explosivo",
     "Fuego",
@@ -92,6 +94,7 @@ __all__ = [
     "RegistroEventos",
     "ResultadoAccion",
     "Sectoid",
+    "SesionJuego",
     "SistemaCombate",
     "SistemaFuego",
     "SistemaInventario",
