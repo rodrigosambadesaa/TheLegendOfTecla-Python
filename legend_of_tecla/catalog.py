@@ -7,8 +7,6 @@ una vuelta.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from itertools import cycle
-from typing import ClassVar
 
 from .model import Item, ItemType
 
@@ -72,12 +70,11 @@ AMMO_TYPES = ("flecha", "virote", "9mm", "45acp", "357", "cartucho", "556", "762
 
 @dataclass
 class LootCycle:
-    _weapons: ClassVar = cycle(WEAPON_CATALOG)
     counter: int = 0
 
     def next_weapon(self) -> Item:
+        template = WEAPON_CATALOG[self.counter % len(WEAPON_CATALOG)]
         self.counter += 1
-        template = next(self._weapons)
         return template.clone(f"{template.name}_{self.counter}")
 
 
