@@ -39,13 +39,15 @@ class SesionJuego:
         try:
             comando = self.comandos.parsear(texto)
             normalizado = self._normalizar_para_motor(comando)
-            salida = self.game.execute(normalizado)
-            desbloqueados = sincronizar_logros(self.game)
-            if desbloqueados:
-                self.audio.reproducir("logro")
-                salida += "\n" + "\n".join(f"Logro ampliado: {logro.title}" for logro in desbloqueados)
-            else:
-                self._audio_para_comando(comando)
+            salida = self._ejecutar_servicio(comando)
+            if salida is None:
+                salida = self.game.execute(normalizado)
+                desbloqueados = sincronizar_logros(self.game)
+                if desbloqueados:
+                    self.audio.reproducir("logro")
+                    salida += "\n" + "\n".join(f"Logro ampliado: {logro.title}" for logro in desbloqueados)
+                else:
+                    self._audio_para_comando(comando)
         except TeclaError as exc:
             salida = f"Error: {exc}"
             normalizado = texto.strip()
@@ -69,6 +71,31 @@ class SesionJuego:
 
     def eventos(self, limit: int = 8) -> str:
         return self.game.bus.drain_text(limit)
+
+    def _ejecutar_servicio(self, comando: Comando) -> str | None:
+        """Intercepta comandos que pertenecen a servicios de aplicacion.
+
+        Esto evita que ``guardar``/``cargar`` caigan en el dispatcher historico
+        de ``game.py`` y garantiza que la persistencia usada sea la versionada
+        de ``persistence.py``.
+        """
+
+        nombre = comando.nombre.lower()
+        if nombre in {"guardar", "save"}:
+            destino = Path(comando.argumentos[0]) if comando.argumentos else Path("savegame_tecla.json")
+            self.guardar(destino)
+            return f"Partida guardada en {destino}."
+        if nombre in {"cargar", "load"}:
+            origen = Path(comando.argumentos[0]) if comando.argumentos else Path("savegame_tecla.json")
+            self.cargar(origen)
+            return f"Partida cargada desde {origen}."
+        if nombre in {"historial", "history"}:
+            limite = int(comando.argumentos[0]) if comando.argumentos and comando.argumentos[0].isdigit() else 10
+            entradas = self.historial[-limite:]
+            if not entradas:
+                return "Historial vacío."
+            return "\n".join(f"[{entrada.turno:04d}] {entrada.normalizado} -> {entrada.salida.splitlines()[0]}" for entrada in entradas)
+        return None
 
     def _normalizar_para_motor(self, comando: Comando) -> str:
         # El CommandDispatcher historico de game.py acepta ``lanzar norte``;
