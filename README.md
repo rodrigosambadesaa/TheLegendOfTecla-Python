@@ -18,7 +18,10 @@ Esta versión conserva la orientación del proyecto original —POO, mapa ASCII,
 - Daño ambiental, fuego propagable sobre madera, cubos de agua, trampas, puertas, terminales, interruptores, barricadas/cobertura como elementos de mapa.
 - Estadísticas, logros, campaña/misiones ligeras y eventos deterministas.
 - Savegames JSON versionados con validación de versión y rechazo de JSON corrupto.
-- Tests unitarios de motor, comandos, persistencia y carga de escenarios.
+- GUI táctica Tkinter que reutiliza el mismo motor de comandos.
+- Editor Tkinter de escenarios JSON con herramientas de mapa y validación de ruta.
+- Replays deterministas con validación SHA-256 del estado final.
+- Tests unitarios de motor, comandos, persistencia, carga de escenarios, editor y replay.
 
 ## Ejecutar
 
@@ -57,6 +60,58 @@ guardar savegame_tecla.json
 cargar savegame_tecla.json
 ```
 
+## GUI
+
+Ventana jugable con mapa ASCII, estado, eventos, entrada de comandos y botones de acción:
+
+```bash
+python -m legend_of_tecla --gui
+```
+
+También está disponible como script instalable:
+
+```bash
+tecla-gui --modo grande --variante 3 --aliados auto
+```
+
+La GUI usa Tkinter. En Windows y macOS suele venir incluido. En Debian/Ubuntu puede requerir:
+
+```bash
+sudo apt install python3-tk
+```
+
+## Editor de escenarios
+
+Abrir el editor gráfico:
+
+```bash
+python -m legend_of_tecla --editor
+```
+
+Crear un escenario JSON vacío sin abrir ventana:
+
+```bash
+tecla-editor --crear data/mi_escenario/escenario.json --filas 12 --columnas 20
+```
+
+El editor guarda JSON compatible con `--modo ficheros --datos <directorio>`.
+
+## Replays
+
+Grabar un replay mínimo:
+
+```bash
+tecla-replay grabar replays/demo.json "inspeccionar" "mover este" "estado"
+```
+
+Validarlo posteriormente:
+
+```bash
+tecla-replay validar replays/demo.json
+```
+
+El replay comprueba que el estado inicial y el estado final coinciden mediante SHA-256.
+
 ## Desarrollo
 
 No hay dependencias de ejecución fuera de la biblioteca estándar. Para tests:
@@ -73,8 +128,21 @@ python -m compileall legend_of_tecla
 pytest -q
 ```
 
+## Arquitectura
+
+- `model.py`: entidades, objetos, estados, dificultad y condiciones de victoria.
+- `world.py`: mapa, celdas, elementos interactivos y serialización.
+- `catalog.py`: catálogo de objetos, armas, armaduras y recetas.
+- `game.py`: motor, turnos, comandos, IA, guardado/carga y logros.
+- `cli.py`: consola y argumentos.
+- `gui.py`: ventana táctica Tkinter.
+- `editor.py`: editor de escenarios JSON.
+- `replay.py`: grabación y validación de partidas reproducibles.
+
 ## Diferencias deliberadas frente a Java
 
-La GUI Swing/noVNC del repo Java no se replica como Swing, porque Python no tiene ese stack. Esta versión deja el núcleo listo para una futura GUI con Tkinter, Textual, PyGame o web, pero centra la reimplementación en el motor y la consola jugable, que es la parte portable y verificable.
+La GUI Swing/noVNC del repo Java no se replica como Swing; se reemplaza por una GUI nativa Tkinter que invoca el mismo motor de comandos. Esto mantiene la reimplementación portable y evita duplicar lógica de juego en la capa visual.
 
-El editor gráfico de escenarios queda sustituido por persistencia JSON clara y por compatibilidad con `escenario.json`; eso permite editar mapas manualmente o generar herramientas posteriores encima del mismo formato.
+El editor gráfico también se reimplementa con Tkinter y guarda el mismo formato JSON que puede cargar el modo `ficheros`. No pretende clonar píxel a píxel el editor Java, sino cubrir la misma función práctica: crear, abrir, modificar, guardar y validar escenarios.
+
+El sistema de replay usa JSON y SHA-256 del estado serializado. Es suficiente para regresiones y partidas documentadas, aunque no intenta reproducir el formato interno exacto del Java.
