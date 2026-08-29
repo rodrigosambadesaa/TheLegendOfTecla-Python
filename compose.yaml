@@ -1,0 +1,6 @@
+services:
+  juego:
+    build: .
+    command: ["python", "-m", "legend_of_tecla"]
+    stdin_open: true
+    tty: true
