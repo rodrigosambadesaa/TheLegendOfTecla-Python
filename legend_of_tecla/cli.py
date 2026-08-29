@@ -4,7 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .game import GameConfig, create_game, load_game
+from .facade import cargar_partida, crear_partida, crear_partida_desde_config
+from .game import GameConfig
 from .model import Difficulty, VictoryCondition
 
 
@@ -18,11 +19,13 @@ Modos:
 
 Durante la partida escribe 'ayuda' para ver los comandos tácticos.
 También puedes abrir la GUI con --gui o el editor de escenarios con --editor.
+La opción --config acepta un JSON/INI gestionado por legend_of_tecla.config.
 """
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="The Legend of Tecla reimplementado en Python", epilog=HELP_TEXT)
+    parser.add_argument("--config", type=Path, help="Archivo JSON/INI de configuración")
     parser.add_argument("--nombre", default="Tecla")
     parser.add_argument("--clase", choices=["marine", "francotirador", "zapador"], default="marine")
     parser.add_argument("--modo", choices=["default", "grande", "ficheros", "procedural"], default="default")
@@ -63,7 +66,9 @@ def parse_allies(raw: str) -> int:
 
 def game_from_args(args: argparse.Namespace):
     if args.cargar:
-        return load_game(args.cargar)
+        return cargar_partida(args.cargar)
+    if args.config:
+        return crear_partida_desde_config(args.config)
     config = GameConfig(
         player_name=args.nombre,
         player_class=args.clase,
@@ -78,7 +83,7 @@ def game_from_args(args: argparse.Namespace):
         player_level=max(1, min(100, args.nivel_jugador)),
         ally_level=max(0, min(100, args.nivel_aliados)),
     )
-    return create_game(config)
+    return crear_partida(config)
 
 
 def run_quick(game) -> int:
