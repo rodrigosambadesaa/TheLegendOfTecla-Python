@@ -69,7 +69,6 @@ __all__ = [
     "VictoryCondition",
     "Zapador",
     "crear_enemigo",
-    "crear_game",
     "crear_jugador",
     "create_game",
     "load_game",
