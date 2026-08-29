@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "the-legend-of-tecla-python"
-version = "0.2.0"
+version = "0.2.1"
 description = "Reimplementacion Python de The Legend of Tecla"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,6 +20,9 @@ tecla = "legend_of_tecla.cli:main"
 tecla-gui = "legend_of_tecla.gui:main"
 tecla-editor = "legend_of_tecla.editor:main"
 tecla-replay = "legend_of_tecla.replay:main"
+
+[tool.setuptools]
+packages = ["legend_of_tecla"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
