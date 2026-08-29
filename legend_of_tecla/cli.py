@@ -17,6 +17,7 @@ Modos:
   procedural   mapa reproducible con --seed
 
 Durante la partida escribe 'ayuda' para ver los comandos tácticos.
+También puedes abrir la GUI con --gui o el editor de escenarios con --editor.
 """
 
 
@@ -36,6 +37,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--nivel-aliados", type=int, default=0)
     parser.add_argument("--rapido", action="store_true", help="Ejecuta una partida no interactiva de humo")
     parser.add_argument("--cargar", type=Path, help="Carga un savegame")
+    parser.add_argument("--gui", action="store_true", help="Abre una ventana Tkinter jugable")
+    parser.add_argument("--editor", action="store_true", help="Abre el editor Tkinter de escenarios")
     return parser
 
 
@@ -113,7 +116,15 @@ def run_interactive(game) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.editor:
+        from .editor import run_editor
+
+        return run_editor(args.datos)
     game = game_from_args(args)
+    if args.gui:
+        from .gui import run_gui
+
+        return run_gui(game)
     if args.rapido:
         return run_quick(game)
     return run_interactive(game)
