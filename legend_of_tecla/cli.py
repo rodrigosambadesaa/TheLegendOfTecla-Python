@@ -7,6 +7,7 @@ from pathlib import Path
 from .facade import cargar_partida, crear_partida, crear_partida_desde_config
 from .game import GameConfig
 from .model import Difficulty, VictoryCondition
+from .runtime import SesionJuego
 
 
 HELP_TEXT = """The Legend of Tecla - Python
@@ -87,22 +88,24 @@ def game_from_args(args: argparse.Namespace):
 
 
 def run_quick(game) -> int:
-    print(game.render())
-    print(game.status())
-    print(game.execute("inspeccionar"))
-    print(game.execute("estado"))
+    session = SesionJuego(game)
+    print(session.render())
+    print(session.estado())
+    print(session.ejecutar("inspeccionar"))
+    print(session.ejecutar("estado"))
     return 0
 
 
 def run_interactive(game) -> int:
+    session = SesionJuego(game)
     print("Bienvenido a The Legend of Tecla (Python)")
     print("Leyenda: J=jugador E=enemigo A=aliado F=fuego ?=oscuridad T=antorcha U=fuente ==madera o=objeto X=objetivo")
-    while not game.finished:
+    while not session.game.finished:
         print()
-        print(game.render())
-        print(game.status())
-        if game.allies:
-            print(game.allies_status())
+        print(session.render())
+        print(session.estado())
+        if session.game.allies:
+            print(session.game.allies_status())
         try:
             command = input("accion> ")
         except EOFError:
@@ -110,11 +113,11 @@ def run_interactive(game) -> int:
             return 0
         if command.strip().lower() in {"salir", "exit", "quit"}:
             return 0
-        print(game.execute(command))
-        events = game.bus.drain_text(8)
+        print(session.ejecutar(command))
+        events = session.eventos(8)
         if events:
             print(events)
-    print("VICTORIA HUMANA" if game.victory else "VICTORIA ENEMIGA")
+    print("VICTORIA HUMANA" if session.game.victory else "VICTORIA ENEMIGA")
     return 0
 
 
